@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>팀 업무 대시보드 — Security Platform Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<style>
+  :root {
+    --bg: #0e1014;
+    --bg-elev: #161922;
+    --bg-card: #1a1e28;
+    --line: #262b38;
+    --line-soft: #1f232e;
+    --text: #ede8de;
+    --text-dim: #8a8f9e;
+    --text-faint: #545968;
+    --accent: #e8b449;
+    --accent-soft: #e8b44914;
+    --teal: #5fb3a1;
+    --rose: #d98a7a;
+    --blue: #7a9cd9;
+    --lavender: #9d8fc4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+    font-feature-settings: "ss01", "ss02";
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, #1a1e2840 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, #e8b44908 0%, transparent 60%);
+    background-attachment: fixed;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 48px 96px;
+  }
+
+  /* ── HEADER ─────────────────────────── */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+
+  .header-left .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header-left .eyebrow::before {
+    content: "";
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .header-left h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: 72px;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .header-left h1 em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+  }
+
+  .header-left .subtitle {
+    margin-top: 20px;
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 440px;
+    line-height: 1.6;
+  }
+
+  .header-right {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+  }
+
+  .header-right .date {
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  /* ── STATS ROW ──────────────────────── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-bottom: 56px;
+  }
+
+  .stat {
+    background: var(--bg);
+    padding: 28px 32px;
+    position: relative;
+  }
+
+  .stat-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+
+  .stat-value {
+    font-family: "Fraunces", serif;
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .stat-value .unit {
+    font-size: 18px;
+    color: var(--text-dim);
+    margin-left: 4px;
+    font-family: "Pretendard Variable", sans-serif;
+    font-weight: 400;
+  }
+
+  .stat-meta {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .stat-accent .stat-value { color: var(--accent); }
+
+  /* ── SECTION TITLES ─────────────────── */
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-title h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  .section-title .num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+  }
+
+  .section-title .line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* ── TABLE ─────────────────────────── */
+  .table-wrap {
+    margin-bottom: 72px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead tr {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  th {
+    text-align: left;
+    padding: 16px 16px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  th:first-child { padding-left: 4px; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--line-soft);
+    transition: background 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background: #ffffff04;
+  }
+
+  td {
+    padding: 22px 16px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+
+  td:first-child { padding-left: 4px; }
+
+  .part-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+
+  .part-tag .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .dot.ndr    { background: var(--teal); }
+  .dot.tms    { background: var(--accent); }
+  .dot.ai     { background: var(--lavender); }
+  .dot.lead   { background: var(--rose); }
+
+  .team-name {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .owner {
+    font-family: "Fraunces", serif;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.005em;
+  }
+
+  .task {
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 340px;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-family: "JetBrains Mono", monospace;
+    letter-spacing: 0.04em;
+    border: 1px solid transparent;
+  }
+
+  .status::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+  }
+
+  .status.progress { color: var(--blue); border-color: #7a9cd930; background: #7a9cd910; }
+  .status.progress::before { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+
+  .status.review { color: var(--accent); border-color: #e8b44930; background: var(--accent-soft); }
+  .status.review::before { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+  .status.wait { color: var(--text-faint); border-color: #54596830; background: #ffffff05; }
+  .status.wait::before { background: var(--text-faint); }
+
+  .status.done { color: var(--teal); border-color: #5fb3a130; background: #5fb3a110; }
+  .status.done::before { background: var(--teal); }
+
+  /* Progress */
+  .progress-cell {
+    min-width: 160px;
+  }
+
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    background: var(--text);
+    transform-origin: left;
+    animation: fillIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform: scaleX(0);
+  }
+
+  .progress-fill.high { background: var(--teal); }
+  .progress-fill.mid  { background: var(--accent); }
+  .progress-fill.low  { background: var(--rose); }
+
+  @keyframes fillIn {
+    to { transform: scaleX(1); }
+  }
+
+  .progress-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    min-width: 38px;
+    text-align: right;
+  }
+
+  /* ── DISTRIBUTION PANELS ───────────── */
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .panel {
+    background: var(--bg-elev);
+    border: 1px solid var(--line);
+    padding: 36px 36px 40px;
+  }
+
+  .panel h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 400;
+    font-size: 22px;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  .dist-item {
+    display: grid;
+    grid-template-columns: 130px 1fr 40px;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .dist-item:last-child { border-bottom: none; }
+
+  .dist-label {
+    font-size: 13px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dist-label .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .dist-bar {
+    height: 6px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dist-bar-fill {
+    position: absolute;
+    left: 0; top: 0;
+    height: 100%;
+    transform-origin: left;
+    animation: fillIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform: scaleX(0);
+  }
+
+  .dist-value {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    color: var(--text);
+    text-align: right;
+  }
+
+  /* ── FOOTER ────────────────────────── */
+  .footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+  }
+
+  /* Stagger entry */
+  tbody tr {
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  tbody tr:nth-child(1) { animation-delay: 0.05s; }
+  tbody tr:nth-child(2) { animation-delay: 0.10s; }
+  tbody tr:nth-child(3) { animation-delay: 0.15s; }
+  tbody tr:nth-child(4) { animation-delay: 0.20s; }
+  tbody tr:nth-child(5) { animation-delay: 0.25s; }
+  tbody tr:nth-child(6) { animation-delay: 0.30s; }
+  tbody tr:nth-child(7) { animation-delay: 0.35s; }
+  tbody tr:nth-child(8) { animation-delay: 0.40s; }
+  tbody tr:nth-child(9) { animation-delay: 0.45s; }
+  tbody tr:nth-child(10) { animation-delay: 0.50s; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .container { padding: 40px 24px; }
+    .header { flex-direction: column; align-items: flex-start; gap: 24px; }
+    .header-left h1 { font-size: 48px; }
+    .header-right { text-align: left; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .panels { grid-template-columns: 1fr; gap: 24px; }
+    .task { max-width: none; }
+    table { font-size: 12px; }
+    th, td { padding: 14px 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="eyebrow">Security Platform · Team Dashboard</div>
+      <h1>팀 업무 <em>현황</em></h1>
+      <p class="subtitle">NDR · TMS IDS/IPS · AI 파트의 주간 업무 진행 상황을 한눈에 확인하는 대시보드입니다.</p>
+    </div>
+    <div class="header-right">
+      <div class="date">2026 · 04 · 09</div>
+      <div>WEEK 15 / Q2</div>
+    </div>
+  </header>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-label">Team Size</div>
+      <div class="stat-value">10<span class="unit">명</span></div>
+      <div class="stat-meta">팀장 1 · NDR 4 · TMS 3(+1) · AI 1</div>
+    </div>
+    <div class="stat stat-accent">
+      <div class="stat-label">In Progress</div>
+      <div class="stat-value">7<span class="unit">건</span></div>
+      <div class="stat-meta">활발히 진행 중인 업무</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">In Review</div>
+      <div class="stat-value">2<span class="unit">건</span></div>
+      <div class="stat-meta">검토 및 머지 대기</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Avg. Progress</div>
+      <div class="stat-value">57<span class="unit">%</span></div>
+      <div class="stat-meta">전체 업무 평균 진척도</div>
+    </div>
+  </section>
+
+  <!-- TABLE -->
+  <section class="table-wrap">
+    <div class="section-title">
+      <h2>업무 현황</h2>
+      <span class="num">01 / 02</span>
+      <span class="line"></span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:140px">파트</th>
+          <th style="width:140px">팀명</th>
+          <th style="width:110px">담당자</th>
+          <th>맡은 업무</th>
+          <th style="width:110px">상태</th>
+          <th style="width:170px">진척도</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="part-tag"><span class="dot lead"></span>팀장</span></td>
+          <td class="team-name">팀 총괄</td>
+          <td class="owner">조해원</td>
+          <td class="task">로드맵 수립 및 파트별 조율, 분기 OKR 점검</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill mid" style="width:60%"></div></div>
+              <span class="progress-num">60%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot ndr"></span>NDR</span></td>
+          <td class="team-name">트래픽 분석</td>
+          <td class="owner">김민준</td>
+          <td class="task">Kafka 기반 플로우 수집 파이프라인 고도화</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill high" style="width:75%"></div></div>
+              <span class="progress-num">75%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot ndr"></span>NDR</span></td>
+          <td class="team-name">탐지 엔진</td>
+          <td class="owner">이서연</td>
+          <td class="task">OpenSearch 쿼리 튜닝 및 탐지룰 최적화</td>
+          <td><span class="status review">IN REVIEW</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill high" style="width:85%"></div></div>
+              <span class="progress-num">85%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot ndr"></span>NDR</span></td>
+          <td class="team-name">시각화</td>
+          <td class="owner">박지훈</td>
+          <td class="task">대시보드 UI 리뉴얼 (React 컴포넌트 분리)</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill mid" style="width:50%"></div></div>
+              <span class="progress-num">50%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot ndr"></span>NDR</span></td>
+          <td class="team-name">성능 테스트</td>
+          <td class="owner">최유진</td>
+          <td class="task">10Gbps 환경 부하 테스트 시나리오 작성</td>
+          <td><span class="status wait">WAITING</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill low" style="width:10%"></div></div>
+              <span class="progress-num">10%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot tms"></span>TMS IDS/IPS</span></td>
+          <td class="team-name">시그니처 관리</td>
+          <td class="owner">정우성</td>
+          <td class="task">Snort 룰셋 자동 업데이트 모듈 개발</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill mid" style="width:65%"></div></div>
+              <span class="progress-num">65%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot tms"></span>TMS IDS/IPS</span></td>
+          <td class="team-name">패킷 처리</td>
+          <td class="owner">한소희</td>
+          <td class="task">DPDK 기반 패킷 캡처 성능 개선</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill mid" style="width:40%"></div></div>
+              <span class="progress-num">40%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot tms"></span>TMS IDS/IPS</span></td>
+          <td class="team-name">정책 엔진</td>
+          <td class="owner">강도윤</td>
+          <td class="task">Spring Boot 정책 API 리팩토링</td>
+          <td><span class="status review">IN REVIEW</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill high" style="width:90%"></div></div>
+              <span class="progress-num">90%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot tms"></span>TMS · 지원</span></td>
+          <td class="team-name">통합 QA</td>
+          <td class="owner">윤하늘</td>
+          <td class="task">IDS·IPS 회귀 테스트 및 이슈 트리아지</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill mid" style="width:55%"></div></div>
+              <span class="progress-num">55%</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><span class="part-tag"><span class="dot ai"></span>AI</span></td>
+          <td class="team-name">이상탐지 모델</td>
+          <td class="owner">임재현</td>
+          <td class="task">네트워크 이상행위 탐지 모델 v2 학습·평가</td>
+          <td><span class="status progress">IN PROGRESS</span></td>
+          <td class="progress-cell">
+            <div class="progress-row">
+              <div class="progress-bar"><div class="progress-fill mid" style="width:45%"></div></div>
+              <span class="progress-num">45%</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- DISTRIBUTION PANELS -->
+  <section>
+    <div class="section-title">
+      <h2>분포 분석</h2>
+      <span class="num">02 / 02</span>
+      <span class="line"></span>
+    </div>
+
+    <div class="panels">
+      <div class="panel">
+        <h3>파트별 구성</h3>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--teal)"></span>NDR</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:40%; background:var(--teal)"></div></div>
+          <div class="dist-value">4</div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--accent)"></span>TMS IDS/IPS</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:40%; background:var(--accent)"></div></div>
+          <div class="dist-value">3+1</div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--lavender)"></span>AI</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:10%; background:var(--lavender)"></div></div>
+          <div class="dist-value">1</div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--rose)"></span>팀장</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:10%; background:var(--rose)"></div></div>
+          <div class="dist-value">1</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>상태별 분포</h3>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--blue)"></span>진행중</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:70%; background:var(--blue)"></div></div>
+          <div class="dist-value">7</div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--accent)"></span>검토</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:20%; background:var(--accent)"></div></div>
+          <div class="dist-value">2</div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--text-faint)"></span>대기</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:10%; background:var(--text-faint)"></div></div>
+          <div class="dist-value">1</div>
+        </div>
+        <div class="dist-item">
+          <div class="dist-label"><span class="dot" style="background:var(--teal)"></span>완료</div>
+          <div class="dist-bar"><div class="dist-bar-fill" style="width:0%; background:var(--teal)"></div></div>
+          <div class="dist-value">0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div>SECURITY PLATFORM TEAM</div>
+    <div>LAST UPDATED · 2026.04.09</div>
+  </footer>
+
+</div>
+</body>
+</html>
